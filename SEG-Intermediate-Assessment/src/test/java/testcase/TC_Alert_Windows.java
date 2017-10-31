@@ -19,6 +19,9 @@ public class TC_Alert_Windows extends TC_Common{
 		url = currentUrl;
 	}
 	
+	/**
+	 * This testcase is to handle the alert
+	 */
 	@Test
 	public void tc_alert() {
 		
