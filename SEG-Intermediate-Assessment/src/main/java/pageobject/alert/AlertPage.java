@@ -45,7 +45,6 @@ public class AlertPage {
 		wait = new WaitHandler(this.driver);
 		alert = new AlertHandler(this.driver);
 		verify = new VerifyHandler(this.driver);
-		wait.waitForElement(this.javaScriptAlert, ObjectRepository.reader.getExplicitWait());
 	}
 	
 	public AlertPage clickJavaScriptAlert() {
@@ -56,6 +55,7 @@ public class AlertPage {
 	
 	public AlertPage clickJsAlertButton() {
 		log.info("Clicking JS Alert Button");
+		wait.waitForElement(this.jsAlertBtn, ObjectRepository.reader.getExplicitWait());
 		handlers.clickElement(this.jsAlertBtn);
 		alert.acceptAlert();
 		return this;

@@ -1,5 +1,6 @@
 package testcase;
 
+import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
@@ -9,7 +10,7 @@ import configreader.ObjectRepository;
 import configreader.PropertyFileReader;
 import pageobject.alert.AlertPage;
 
-public class TC_Alert_Windows extends TC_Common{
+public class TC_Alert extends TC_Common {
 
 	@Parameters({"currentUrl"})
 	@BeforeClass
@@ -26,18 +27,17 @@ public class TC_Alert_Windows extends TC_Common{
 	public void tc_alert() {
 		
 		String fullName = "Iqbal";
-		String jsAlertMsg = "You entered: "+fullName;
 		
 		AlertPage alertPage = new AlertPage(driver);
 		alertPage.clickJavaScriptAlert();
 		
 		alertPage.clickJsAlertButton();
-		alertPage.verifyJsAlertMsg("You successfuly clicked an alert");
+		Assert.assertTrue(alertPage.verifyJsAlertMsg("You successfuly clicked an alert"), "Alert message didn't matched.");
 		
 		alertPage.clickJsConfirmBtn();
-		alertPage.verifyJsAlertMsg("You clicked: Cancel");
+		Assert.assertTrue(alertPage.verifyJsAlertMsg("You clicked: Cancel"), "Alert message didn't matched.");
 		
 		alertPage.clickJsPropmptBtn(fullName);
-		alertPage.verifyJsAlertMsg(jsAlertMsg);
+		Assert.assertTrue(alertPage.verifyJsAlertMsg("You entered: "+fullName), "Alert message didn't matched.");
 	}
 }

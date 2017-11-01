@@ -53,18 +53,6 @@ public class GenericHandlers {
 		this.driver = driver;
 	}
 
-	/*public void loadObjects() {
-		prop = new Properties();
-		try {
-			prop.load(new FileInputStream(new File("./src/main/resources/object.properties")));
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-	}*/
-
 	public void unloadObjects() {
 		prop = null;
 	}
@@ -102,7 +90,7 @@ public class GenericHandlers {
 
 			// this is for grid run
 			if(bRemote)
-				driver = new RemoteWebDriver(new URL("http://"+sHubUrl+":"+sHubPort+"/wd/hub"), dc);
+				this.driver = new RemoteWebDriver(new URL("http://"+sHubUrl+":"+sHubPort+"/wd/hub"), dc);
 			else{ // this is for local run
 				switch (browser) {
 				case Chrome:
@@ -131,10 +119,10 @@ public class GenericHandlers {
 			driver.manage().timeouts().implicitlyWait(ObjectRepository.reader.getImplicitWait(), TimeUnit.SECONDS);
 			//driver.get(ObjectRepository.reader.getReservationUrl());
 			driver.get(url);
-			log.info("The browser:" + browser + " launched successfully");
 		} catch (Exception e) {
 			log.info("The browser:" + browser + " could not be launched");
 		}
+		log.info("The browser:" + browser + " launched successfully");
 	}
 
 	/**
@@ -146,12 +134,12 @@ public class GenericHandlers {
 		try {
 			element.clear();
 			element.sendKeys(data);	
-			log.info("The data: "+data+" entered successfully in field");
 		} catch (NoSuchElementException e) {
 			log.info("The data: "+data+" could not be entered in the field");
 		} catch (Exception e) {
 			log.info("Unknown exception occured while entering "+data+" in the field");
 		}
+		log.info("The data: "+data+" entered successfully in field");
 	}
 	
 	/**
@@ -183,23 +171,14 @@ public class GenericHandlers {
 	 */
 	public void clickElement(WebElement element) {
 		try{
-			element.click();
 			log.info("The element : "+element+" is clicked.");
+			element.click();
 		} catch (Exception e) {
+			e.printStackTrace();
 			log.info("The element : "+element+" could not be clicked.");
 		}
 	}
 	
-	
-	public void clickByXpathNoSnap(WebElement xpathVal) {
-		try{
-			xpathVal.click();
-			log.info("The element : "+xpathVal+" is clicked.");
-		} catch (Exception e) {
-			log.info("The element : "+xpathVal+" could not be clicked.");
-		}		
-	}
-
 	/**
 	 * This method will check if the radio button is not selected, then select the radio button
 	 * @param radioElement
@@ -211,10 +190,10 @@ public class GenericHandlers {
 			if (!isSelected) {
 				radioElement.click();
 			}
-			log.info("The element : "+radioElement+" is selected.");
 		} catch (Exception e) {
 			log.info("The element : "+radioElement+" could not be selected.");
 		}
+		log.info("The element : "+radioElement+" is selected.");
 	}
 	
 	/**
@@ -224,36 +203,22 @@ public class GenericHandlers {
 	public void mouseOver(WebElement element) {
 		try{
 			new Actions(driver).moveToElement(element).build().perform();
-			log.info("The mouse over by xpath : "+element+" is performed.");
 		} catch (Exception e) {
 			log.info("The mouse over by xpath : "+element+" could not be performed.");
 		}
+		log.info("The mouse over by xpath : "+element+" is performed.");
 	}
 
 	/**
 	 * This method will return the text of the element using xpath as locator
 	 * @param xpathVal  The xpath (locator) of the element
 	 */
-	public String getTextByXpath(WebElement xpathVal){
+	public String getTextByXpath(WebElement element){
 		String bReturn = "";
 		try{
-			return xpathVal.getText();
+			return element.getText();
 		} catch (Exception e) {
-			log.info("The element with xpath: "+xpathVal+" could not be found.");
-		}
-		return bReturn; 
-	}
-
-	/**
-	 * This method will return the text of the element using id as locator
-	 * @param xpathVal  The id (locator) of the element
-	 */
-	public String getTextById(WebElement idVal) {
-		String bReturn = "";
-		try{
-			return idVal.getText();
-		} catch (Exception e) {
-			log.info("The element with id: "+idVal+" could not be found.");
+			log.info("The element with xpath: "+element+" could not be found.");
 		}
 		return bReturn; 
 	}

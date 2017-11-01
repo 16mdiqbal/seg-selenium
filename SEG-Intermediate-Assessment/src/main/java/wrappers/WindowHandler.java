@@ -13,8 +13,8 @@ public class WindowHandler {
 	private WebDriver driver;
 	
 	public WindowHandler(WebDriver driver) {
-		log.info("WindowHandler : " + driver.hashCode());
 		this.driver = driver;
+		log.info("WindowHandler : " + this.driver.hashCode());
 	}
 	
 	/**
@@ -34,13 +34,14 @@ public class WindowHandler {
 			for (String eachWindow : windowList) {
 				if (windowCounter==index) {
 					driver.switchTo().window(eachWindow);
+					break;
 				}
 				windowCounter++;
 			}
 		} catch (Exception e) {
-			log.error("Couldnot switch to " + index + " window");
+			log.error("Could not switch to " +index+ " window");
 		}
-		log.info("switched to " + index + " window");
+		log.info("switched to " +index+ " window");
 	}
 	
 	/**

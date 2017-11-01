@@ -77,6 +77,7 @@ public class AlertHandler {
 	public void promptBox(String alertText) {
 		try {
 			getAlert().sendKeys(alertText);
+			getAlert().accept();
 		} catch (Exception e) {
 			log.error("Could not get the alert text");
 		}
