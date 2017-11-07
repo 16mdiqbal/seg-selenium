@@ -56,7 +56,7 @@ public class WindowHandler {
 				break;
 			}
 		} catch (Exception e) {
-			log.error("The window could not be switched to the first window.");
+			log.error("Could not be switched to the first window.");
 		} 
 		log.info("Switched to parent window successfully");
 	}
@@ -72,7 +72,7 @@ public class WindowHandler {
 				this.driver.switchTo().window(eachWindow);
 			}
 		} catch (Exception e) {
-			log.error("The window could not be switched to the last window.");
+			log.error("Could not be switched to the last window.");
 		} 
 		log.info("Switched to last window successfully");
 	}

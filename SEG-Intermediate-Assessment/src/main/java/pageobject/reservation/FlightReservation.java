@@ -5,6 +5,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+import org.testng.Reporter;
 
 import configreader.ObjectRepository;
 import logger.LoggerHandler;
@@ -143,7 +144,10 @@ public class FlightReservation {
 	}
 	
 	public FlightReservationSuccess clickBookTckt() {
+		Reporter.log(Thread.currentThread().getStackTrace()[1].getMethodName(), true);
 		log.info("Clicking Continue booking button");
+		String snapPath = handlers.takeSnap();
+		Reporter.log("<a href='" +snapPath+ "'> <img src='" +snapPath+ "' height='100' width='100' /> </a>");
 		handlers.clickElement(this.continueBtn);
 		return new FlightReservationSuccess(this.driver);
 	}

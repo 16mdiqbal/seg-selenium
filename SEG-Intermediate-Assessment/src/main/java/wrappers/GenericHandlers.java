@@ -1,10 +1,17 @@
 package wrappers;
 
+import java.awt.AWTException;
+import java.awt.Rectangle;
+import java.awt.Robot;
+import java.awt.Toolkit;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
+
+import javax.imageio.ImageIO;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
@@ -20,11 +27,13 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
+import org.testng.Reporter;
 
 import browser.BrowserType;
 import configreader.ObjectRepository;
 import logger.LoggerHandler;
 import utility.ResourceHandler;
+import utility.UtilityClass;
 
 public class GenericHandlers {
 
@@ -34,19 +43,9 @@ public class GenericHandlers {
 	protected static Properties prop;
 	public String sUrl,sHubUrl,sHubPort;
 	public String url;
-	
+
 	public GenericHandlers() {
-		/*Properties prop = new Properties();
-		try {
-			prop.load(new FileInputStream(new File("./src/main/resources/config.properties")));
-			sHubUrl = prop.getProperty("HUB");
-			sHubPort = prop.getProperty("PORT");
-			sUrl = prop.getProperty("URL");
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}*/
+		
 	}
 
 	public GenericHandlers(WebDriver driver) {
@@ -112,15 +111,15 @@ public class GenericHandlers {
 				case Iexplorer:
 					break;
 				default:
-					break;
+					throw new RuntimeException("Provided browser name is not correct");
 				}
 			}
 			driver.manage().window().maximize();
 			driver.manage().timeouts().implicitlyWait(ObjectRepository.reader.getImplicitWait(), TimeUnit.SECONDS);
-			//driver.get(ObjectRepository.reader.getReservationUrl());
 			driver.get(url);
 		} catch (Exception e) {
-			log.info("The browser:" + browser + " could not be launched");
+			log.error("The browser:" + browser + " could not be launched");
+			log.error(e.getStackTrace());
 		}
 		log.info("The browser:" + browser + " launched successfully");
 	}
@@ -135,23 +134,46 @@ public class GenericHandlers {
 			element.clear();
 			element.sendKeys(data);	
 		} catch (NoSuchElementException e) {
-			log.info("The data: "+data+" could not be entered in the field");
+			log.error("The data: "+data+" could not be entered in the field");
+			log.error(e.getStackTrace());
 		} catch (Exception e) {
-			log.info("Unknown exception occured while entering "+data+" in the field");
+			log.error("Unknown exception occured while entering "+data+" in the field");
+			log.error(e.getStackTrace());
 		}
 		log.info("The data: "+data+" entered successfully in field");
 	}
-	
+
+
+	/**
+	 * This method will enter the value to the text area
+	 * @param element
+	 * @param data
+	 */
+	public void enterTextAreaData(WebElement element, String data) {
+		try {
+			element.sendKeys(data);	
+		} catch (NoSuchElementException e) {
+			log.error("The data: "+data+" could not be entered in the field");
+			log.error(e.getStackTrace());
+		} catch (Exception e) {
+			log.error("Unknown exception occured while entering "+data+" in the field");
+			log.error(e.getStackTrace());
+		}
+		log.info("The data: "+data+" entered successfully in field");
+	}
+
 	/**
 	 * This method will close all the browsers
 	 */
 	public void closeAllBrowsers() {
 		try {
-			driver.quit();
+			if (driver!=null) {
+				driver.quit();
+			}
 		} catch (Exception e) {
-			log.info("The browser could not be closed.");
+			log.error("The browser could not be closed.");
+			log.error(e.getStackTrace());
 		}
-
 	}
 
 	/**
@@ -159,9 +181,12 @@ public class GenericHandlers {
 	 */
 	public void closeBrowser() {
 		try {
-			driver.close();
+			if (driver!=null) {
+				driver.close();
+			}
 		} catch (Exception e) {
-			log.info("The browser could not be closed.");
+			log.error("The browser could not be closed.");
+			log.error(e.getStackTrace());
 		}
 	}
 
@@ -174,11 +199,11 @@ public class GenericHandlers {
 			log.info("The element : "+element+" is clicked.");
 			element.click();
 		} catch (Exception e) {
-			e.printStackTrace();
-			log.info("The element : "+element+" could not be clicked.");
+			log.error("The element : "+element+" could not be clicked.");
+			log.error(e.getStackTrace());
 		}
 	}
-	
+
 	/**
 	 * This method will check if the radio button is not selected, then select the radio button
 	 * @param radioElement
@@ -191,11 +216,12 @@ public class GenericHandlers {
 				radioElement.click();
 			}
 		} catch (Exception e) {
-			log.info("The element : "+radioElement+" could not be selected.");
+			log.error("The element : "+radioElement+" could not be selected.");
+			log.error(e.getStackTrace());
 		}
 		log.info("The element : "+radioElement+" is selected.");
 	}
-	
+
 	/**
 	 * This method will mouse over on the element using xpath as locator
 	 * @param xpathVal  The xpath (locator) of the element to be moused over
@@ -204,7 +230,8 @@ public class GenericHandlers {
 		try{
 			new Actions(driver).moveToElement(element).build().perform();
 		} catch (Exception e) {
-			log.info("The mouse over by xpath : "+element+" could not be performed.");
+			log.error("The mouse over by xpath : "+element+" could not be performed.");
+			log.error(e.getStackTrace());
 		}
 		log.info("The mouse over by xpath : "+element+" is performed.");
 	}
@@ -218,7 +245,8 @@ public class GenericHandlers {
 		try{
 			return element.getText();
 		} catch (Exception e) {
-			log.info("The element with xpath: "+element+" could not be found.");
+			log.error("The element with xpath: "+element+" could not be found.");
+			log.error(e.getStackTrace());
 		}
 		return bReturn; 
 	}
@@ -226,29 +254,47 @@ public class GenericHandlers {
 	/**
 	 * This method will take snapshot of the browser
 	 */
-	public String takeSnap(int status){
-		long number = (long) Math.floor(Math.random() * 900000000L) + 10000000L;
+	public String takeSnap(){
+		long number = UtilityClass.getRandomNumber();
 		String destinationPath="";
 		File srcFile = null;
 		File destFile = null;
+		String screenShotPath ="";
 		try {
-			if (status==1) { //success
-				destinationPath = ResourceHandler.getResourcePath("\\src\\main\\resources\\screenshots\\success");
-			} else if (status==2) { //failure
-				destinationPath = ResourceHandler.getResourcePath("\\src\\main\\resources\\screenshots\\failure");
-			} else if (status==3) { //skip
-				destinationPath = ResourceHandler.getResourcePath("\\src\\main\\resources\\screenshots\\skipped");
-			} else if (status==16) { //skip
-				destinationPath = ResourceHandler.getResourcePath("\\src\\main\\resources\\screenshots\\start");
-			}
+			destinationPath = ResourceHandler.getResourcePath("\\src\\main\\resources\\screenshots");
 			srcFile = ((TakesScreenshot)driver).getScreenshotAs(OutputType.FILE);
 			destFile = new File(destinationPath+"\\" +number+ ".jpg");
 			FileUtils.copyFile(srcFile , destFile);
+			screenShotPath = destFile.getAbsolutePath();
 		} catch (WebDriverException e) {
-			log.info("The browser has been closed.");
+			log.error(e.getStackTrace());
 		} catch (IOException e) {
-			log.info("The snapshot could not be taken");
+			log.error(e.getStackTrace());
 		}
-		return destFile.getAbsolutePath();
+		return screenShotPath;
+	}
+
+	/**
+	 * This method will take snapshot of full screen using Robot class
+	 */
+	public String takeFullSnap() {
+		long number = UtilityClass.getRandomNumber();
+		String destinationPath= "";
+		String screenShotPath = "";
+		try {
+			Robot robot = new Robot();
+			String format = "jpg";
+			destinationPath = ResourceHandler.getResourcePath("\\src\\main\\resources\\screenshots"); 
+			File destFile = new File(destinationPath+"\\" +number+ "." + format);
+			Rectangle screenRect = new Rectangle(Toolkit.getDefaultToolkit().getScreenSize());
+			BufferedImage screenFullImage = robot.createScreenCapture(screenRect);
+			ImageIO.write(screenFullImage, format, destFile);
+			screenShotPath = destFile.getAbsolutePath(); 
+		} catch (AWTException | IOException ex) {
+			log.error(ex.getStackTrace());
+		} catch (Exception e) {
+			log.error(e.getStackTrace());
+		}
+		return screenShotPath;
 	}
 }

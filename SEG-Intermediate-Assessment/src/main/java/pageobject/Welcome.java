@@ -8,7 +8,7 @@ import org.openqa.selenium.support.PageFactory;
 
 import configreader.ObjectRepository;
 import logger.LoggerHandler;
-import pageobject.registration.RegisterUser;
+import pageobject.registration.Registration;
 import pageobject.reservation.FlightReservation;
 import wrappers.GenericHandlers;
 import wrappers.WaitHandler;
@@ -35,10 +35,10 @@ public class Welcome {
 		//wait.waitForElement(this.registerUser, ObjectRepository.reader.getExplicitWait());
 	}
 	
-	public RegisterUser clickRegister() {
+	public Registration clickRegister() {
 		log.info("Clicking REGISTER");
 		handlers.clickElement(registerUser);
-		return new RegisterUser(driver);
+		return new Registration(driver);
 	}
 	
 	public FlightReservation clickFlightTicketBooking() {

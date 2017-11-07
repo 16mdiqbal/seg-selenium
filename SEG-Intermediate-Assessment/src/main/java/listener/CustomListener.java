@@ -39,8 +39,8 @@ public class CustomListener extends GenericHandlers implements ITestListener {
 		Reporter.log(result.getName() + " is failed", true);
 		int status = result.getStatus();
 		if (status == 2) {
-			String screenShotPath = takeSnap(status);
-			Reporter.log("<a href='" +screenShotPath+ "'> <img src='" +screenShotPath+ "' height='100' width='100' /> </a>");
+			String snapPath = takeSnap();
+			Reporter.log("<a href='" +snapPath+ "'> <img src='" +snapPath+ "' height='100' width='100' /> </a>");
 		}
 	}
 
@@ -49,8 +49,8 @@ public class CustomListener extends GenericHandlers implements ITestListener {
 		Reporter.log(result.getName() + " is skipped", true);
 		int status = result.getStatus();
 		if (status == 3) {
-			String screenShotPath = takeSnap(status);
-			Reporter.log("<a href='" +screenShotPath+ "'> <img src='" +screenShotPath+ "' height='100' width='100' /> </a>");
+			String snapPath = takeSnap();
+			Reporter.log("<a href='" +snapPath+ "'> <img src='" +snapPath+ "' height='100' width='100' /> </a>");
 		}
 	}
 
@@ -59,8 +59,8 @@ public class CustomListener extends GenericHandlers implements ITestListener {
 		Reporter.log(result.getName() +" is started", true);
 		int status = result.getStatus();
 		if (status == 16) {
-			String screenShotPath = takeSnap(status);
-			Reporter.log("<a href='" +screenShotPath+ "'> <img src='" +screenShotPath+ "' height='100' width='100' /> </a>");
+			String snapPath = takeSnap();
+			Reporter.log("<a href='" +snapPath+ "'> <img src='" +snapPath+ "' height='100' width='100' /> </a>");
 		}
 	}
 
@@ -69,8 +69,8 @@ public class CustomListener extends GenericHandlers implements ITestListener {
 		Reporter.log(result.getName() + " is successful", true);
 		int status = result.getStatus();
 		if (status == 1) {
-			String screenShotPath = takeSnap(status);
-			Reporter.log("<a href='" +screenShotPath+ "'> <img src='" +screenShotPath+ "' height='100' width='100' /> </a>");
+			String snapPath = takeSnap();
+			Reporter.log("<a href='" +snapPath+ "'> <img src='" +snapPath+ "' height='100' width='100' /> </a>");
 		}
 	}
 }

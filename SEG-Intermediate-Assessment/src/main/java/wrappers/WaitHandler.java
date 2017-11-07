@@ -56,4 +56,12 @@ public class WaitHandler {
 		wait.until(ExpectedConditions.visibilityOf(element));
 		log.info("Element found : " + element.getText());
 	}
+	
+	public void explicitWait(long milliseconds) {
+		try {
+			Thread.sleep(milliseconds);
+		} catch (InterruptedException e) {
+			log.error(e.getStackTrace());
+		}
+	}
 }

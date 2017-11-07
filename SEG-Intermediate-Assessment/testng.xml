@@ -2,8 +2,10 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
 <suite name="Suite of suites">
 	<suite-files>
-		<suite-file path="TC_RegistrationNG.xml"></suite-file>
-		<suite-file path="TC_LoginNG.xml"></suite-file>
-		<suite-file path="TC_FlightReservationNG.xml"></suite-file>
+		<suite-file path="config/TC_RegistrationNG.xml"></suite-file>
+		<suite-file path="config/TC_LoginNG.xml"></suite-file>
+		<suite-file path="config/TC_FlightReservationNG.xml"></suite-file>
+		<suite-file path="config/TC_Alert_NG.xml"></suite-file>
+		<suite-file path="config/TC_Frame_NG.xml"></suite-file>
 	</suite-files>
-</suite> <!-- Suite -->
+</suite>
