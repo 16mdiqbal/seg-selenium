@@ -1,10 +1,11 @@
-package pageobject.alert;
+package pageobject.herokuapp.alert;
 
 import org.apache.log4j.Logger;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+import org.testng.Reporter;
 
 import configreader.ObjectRepository;
 import logger.LoggerHandler;
@@ -21,9 +22,6 @@ public class AlertPage {
 	private GenericHandlers handlers;
 	private AlertHandler alert;
 	private VerifyHandler verify;
-	
-	@FindBy(linkText="JavaScript Alerts")
-	WebElement javaScriptAlert;
 	
 	@FindBy(xpath="//button[text()='Click for JS Alert']")
 	WebElement jsAlertBtn;
@@ -47,15 +45,10 @@ public class AlertPage {
 		verify = new VerifyHandler(this.driver);
 	}
 	
-	public AlertPage clickJavaScriptAlert() {
-		log.info("Clicking javascript alert button");
-		handlers.clickElement(this.javaScriptAlert);
-		return this;
-	}
-	
 	public AlertPage clickJsAlertButton() {
 		log.info("Clicking JS Alert Button");
 		wait.waitForElement(this.jsAlertBtn, ObjectRepository.reader.getExplicitWait());
+		Reporter.log(driver.getTitle(), true);
 		handlers.clickElement(this.jsAlertBtn);
 		alert.acceptAlert();
 		return this;
@@ -63,6 +56,7 @@ public class AlertPage {
 	
 	public AlertPage clickJsConfirmBtn() {
 		log.info("Clicking JS Confirm button");
+		Reporter.log(driver.getTitle(), true);
 		handlers.clickElement(this.jsConfirmBtn);
 		alert.dismissAlert();
 		return this;
@@ -70,6 +64,7 @@ public class AlertPage {
 	
 	public AlertPage clickJsPropmptBtn(String promptBoxTxt) {
 		log.info("Clicking JS Prompt button");
+		Reporter.log(driver.getTitle(), true);
 		handlers.clickElement(this.jsPropmptBtn);
 		alert.promptBox(promptBoxTxt);
 		return this;
@@ -77,6 +72,8 @@ public class AlertPage {
 	
 	public boolean verifyJsAlertMsg(String jsAlertMsg) {
 		log.info("Verifying JS alert message");
+		String snapPath = handlers.takeFullSnap();
+		Reporter.log("<a href='" +snapPath+ "'> <img src='" +snapPath+ "' height='100' width='100' /> </a>");
 		return verify.isTextVerifiedByElement(this.jsAlertMsg, jsAlertMsg);
 	}
 }
